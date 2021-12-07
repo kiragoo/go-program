@@ -2,18 +2,19 @@ package main
 
 import "fmt"
 
+var ans = []int{}
+
 func main() {
 	nums := []int{1, 2, 3, 4, 5}
-	var ans []int
-	inner(nums, 5, ans)
+	// ans := []int{}
+	inner(nums, 4)
 	fmt.Println(ans)
 }
 
-func inner(nums []int, i int, array []int) {
-	if i == 0 {
-		_ = append(array, nums[0])
+func inner(nums []int, i int) {
+	if i < 0 {
 		return
 	}
-	inner(nums, i-1, array)
-	_ = append(array, nums[i-1])
+	inner(nums, i-1)
+	ans = append(ans, nums[i])
 }

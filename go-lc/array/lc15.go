@@ -1,37 +1,34 @@
 package array
 
-import (
-	"sort"
-)
+import "sort"
 
 func LC15(nums []int) [][]int {
 	sort.Ints(nums)
 	res := [][]int{}
-	length := len(nums)
-	if length < 3 {
+	n := len(nums)
+	if n < 3 {
 		return res
 	}
-	r := length-1
-	for f := 0; f <= len(nums)-3; f++ {
-		if f > 0 && nums[f-1] == nums[f] {
+	for i := 0; i < n; i++ {
+		if i > 0 && nums[i-1] == nums[i] {
 			continue
 		}
-		for s := f + 1; s < r; {
-			if s > f+1 && nums[s-1] == nums[s]{
-				s++
+		r := n - 1
+		for j := i + 1; j < r; {
+			if j > i+1 && nums[j-1] == nums[j] {
+				j++
 				continue
 			}
-			sum := nums[f] + nums[s] + nums[r]
+			sum := nums[i] + nums[j] + nums[r]
 			if sum == 0 {
-				tmp := []int{nums[f], nums[s], nums[r]}
+				tmp := []int{nums[i], nums[j], nums[r]}
 				res = append(res, tmp)
-				s++
-			} else if sum > 0 {
-				r--
+				j++
+			} else if sum < 0 {
+				j++
 			} else {
-				s++
+				r--
 			}
-
 		}
 	}
 	return res
