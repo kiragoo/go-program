@@ -1,8 +1,9 @@
 package example
 
 import (
+	"bytes"
+	"fmt"
 	"html/template"
-	"os"
 )
 
 type TelegrafConf struct {
@@ -30,9 +31,11 @@ type Task struct {
 }
 
 func GenerateTelegrafConf(t Task) {
+	var b bytes.Buffer
 	tmpl := template.Must(template.ParseFiles("template/telegraf.conf.tpl"))
-	err := tmpl.Execute(os.Stdout, t)
+	err := tmpl.Execute(&b, t)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(b.String())
 }
