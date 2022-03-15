@@ -5,17 +5,33 @@ import (
 	"os"
 )
 
-type TelegrafConfStruct struct {
-	InstanceID string `json:"instanceId"`
-	Username   string `json:"username"`
-	Password   string `json:"password"`
-	Url        string `json:"url"`
-	Http       string `json:"http"`
+type TelegrafConf struct {
+	MetricConfig `json:"metricConfig,omitempty"`
+	LogType      string `json:"logType,omitempty"`
+	LogConfig    `json:"logConfig,omitempty"`
 }
 
-func GenerateTelegrafConf(t *TelegrafConfStruct) {
-	tmpl, _ := template.ParseFiles("telegraf.conf.tpl")
-	err := tmpl.Execute(os.Stdout, &t)
+type MetricConfig struct {
+	BCMetricGateway string `json:"bcMetricGateway"`
+}
+
+type LogConfig struct {
+	EsUrl       string `json:"esUrl"`
+	EsUsername  string `json:"esUsername"`
+	EsPassword  string `json:"esPassword"`
+	EsIndexName string `json:"esIndexName"`
+}
+
+type Task struct {
+	Namespace       string `json:"namespace,omitempty"`
+	EmqxApiUsername string `json:"emqxApiUsername,omitempty"`
+	EmqxApiPassword string `json:"emqxApiPassword"`
+	TelegrafConf    `json:"telegrafConf,omitempty"`
+}
+
+func GenerateTelegrafConf(t Task) {
+	tmpl := template.Must(template.ParseFiles("template/telegraf.conf.tpl"))
+	err := tmpl.Execute(os.Stdout, t)
 	if err != nil {
 		panic(err)
 	}

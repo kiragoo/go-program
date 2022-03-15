@@ -2,9 +2,15 @@ package example
 
 import "testing"
 
+var (
+	namespace       string = "test"
+	emqxApiUsername string = "admin"
+	emqxApiPassword string = "public"
+)
+
 func TestGenerateTelegrafConf(t *testing.T) {
 	type args struct {
-		t *TelegrafConfStruct
+		t Task
 	}
 	tests := []struct {
 		name string
@@ -13,12 +19,22 @@ func TestGenerateTelegrafConf(t *testing.T) {
 		{
 			name: "telegraf-test",
 			args: args{
-				t: &TelegrafConfStruct{
-					InstanceID: "test",
-					Username:   "test",
-					Password:   "test",
-					Url:        "test",
-					Http:       "http",
+				t: Task{
+					Namespace:       namespace,
+					EmqxApiUsername: emqxApiUsername,
+					EmqxApiPassword: emqxApiPassword,
+					TelegrafConf: TelegrafConf{
+						MetricConfig: MetricConfig{
+							BCMetricGateway: "http://gateway",
+						},
+						LogType: "external",
+						LogConfig: LogConfig{
+							EsUrl:       "http://url",
+							EsUsername:  "esUsername",
+							EsPassword:  "esPassword",
+							EsIndexName: "esIndexName",
+						},
+					},
 				},
 			},
 		},
@@ -28,4 +44,22 @@ func TestGenerateTelegrafConf(t *testing.T) {
 			GenerateTelegrafConf(tt.args.t)
 		})
 	}
+	// task := Task{
+	// 	Namespace:       namespace,
+	// 	EmqxApiUsername: emqxApiUsername,
+	// 	EmqxApiPassword: emqxApiPassword,
+	// 	TelegrafConf: TelegrafConf{
+	// 		MetricConfig: MetricConfig{
+	// 			BCMetricGateway: "http://gateway",
+	// 		},
+	// 		LogType: "external",
+	// 		LogConfig: LogConfig{
+	// 			EsUrl:       "http://url",
+	// 			EsUsername:  "esUsername",
+	// 			EsPassword:  "esPassword",
+	// 			EsIndexName: "esIndexName",
+	// 		},
+	// 	},
+	// }
+	// GenerateTelegrafConf(task)
 }
